@@ -2,6 +2,8 @@ package com.example.hateoasapi.controller;
 
 import static org.springframework.hateoas.mvc.ControllerLinkBuilder.*;
 
+import java.util.Date;
+
 import com.example.hateoasapi.domain.*;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpStatus;
@@ -23,6 +25,15 @@ public class GreetingRestController {
         Greeting greeting = new Greeting(String.format(TEMPLATE, name));
         greeting.add(linkTo(methodOn(GreetingRestController.class).greeting(name)).withSelfRel());
         ResponseEntity<Greeting> response = new ResponseEntity<Greeting>(greeting, HttpStatus.OK);
+
+        return response;
+    }
+
+    @RequestMapping(path="/posts", method=RequestMethod.GET)
+    public HttpEntity<Post> posts() {
+        Post post = new Post("hello", "hello world", "general", new Date().toLocaleString());
+        post.add(linkTo(methodOn(GreetingRestController.class).posts()).withSelfRel());
+        ResponseEntity<Post> response = new ResponseEntity<Post>(post, HttpStatus.OK);
 
         return response;
     }

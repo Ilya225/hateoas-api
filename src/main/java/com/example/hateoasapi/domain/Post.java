@@ -14,7 +14,7 @@ public class Post extends ResourceSupport {
     private String created;
 
     @JsonCreator
-    public Post(String body) {
+    public Post(String title, String body, String category, String created) {
         this.body = body;
     }
 
