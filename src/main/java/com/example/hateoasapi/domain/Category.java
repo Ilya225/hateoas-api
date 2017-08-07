@@ -10,7 +10,7 @@ public class Category extends ResourceSupport {
         this.name = name;
     }
 
-    public String getName(name) {
+    public String getName(String name) {
         return name;
     }
 }
