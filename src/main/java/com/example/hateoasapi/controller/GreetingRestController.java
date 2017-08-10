@@ -20,6 +20,10 @@ public class GreetingRestController {
 
     private static final String TEMPLATE = "Hello, %s!";
 
+    public static Post post = new Post("hello", "hello world", "general", new Date().toLocaleString());
+    public static Post post1 = new Post("more", "more than a feeling", "general", new Date().toLocaleString());
+    public static Post post2 = new Post("Just", "just a moment", "general", new Date().toLocaleString());
+
     @RequestMapping(path="/greeting", method=RequestMethod.GET)
     public HttpEntity<Greeting> greeting(
         @RequestParam(value="name", required=false, defaultValue="World") String name
@@ -35,10 +39,6 @@ public class GreetingRestController {
     public HttpEntity<List<Post>> posts() {
         List<Post> list = new ArrayList<>();
 
-        Post post = new Post("hello", "hello world", "general", new Date().toLocaleString());
-        Post post1 = new Post("more", "more than a feeling", "general", new Date().toLocaleString());
-        Post post2 = new Post("Just", "just a moment", "general", new Date().toLocaleString());
-
         list.add(post);
         list.add(post1);
         list.add(post2);
@@ -49,5 +49,13 @@ public class GreetingRestController {
         ResponseEntity<List<Post>> response = new ResponseEntity<List<Post>>(list, HttpStatus.OK);
 
         return response;
+    }
+
+
+    @RequestMapping(path="/post", method=RequestMethod.GET)
+    public HttpEntity<Post> onePost() {
+        post.add(linkTo(methodOn(GreetingRestController.class).onePost()).withSelfRel());
+
+        return new ResponseEntity<Post>(post, HttpStatus.OK); 
     }
 }
