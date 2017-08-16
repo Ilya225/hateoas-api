@@ -44,7 +44,7 @@ public class PostController {
         return post.get(); //TODO Optional instance handling
     }
 
-    @RequestMapping(path="/post/add", method=RequestMethod.POST)
+    @RequestMapping(path="/post/create", method=RequestMethod.POST)
     public ResponseEntity<?> addPost(@RequestBody Post input) {
         postRepository.save(new Post(input.getTitle(), input.getBody()));
         return new ResponseEntity<>(HttpStatus.OK).noContent().build();
