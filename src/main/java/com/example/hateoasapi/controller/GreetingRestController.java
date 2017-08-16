@@ -23,10 +23,6 @@ public class GreetingRestController {
     private static final String TEMPLATE = "Hello, %s!";
     private CustomerRepository customerRepository;
 
-    public static Post post = new Post("hello", "hello world", "general", new Date().toLocaleString());
-    public static Post post1 = new Post("more", "more than a feeling", "general", new Date().toLocaleString());
-    public static Post post2 = new Post("Just", "just a moment", "general", new Date().toLocaleString());
-
     public GreetingRestController(CustomerRepository customerRepository) {
         this.customerRepository = customerRepository;
     }
@@ -42,29 +38,6 @@ public class GreetingRestController {
         return response;
     }
 
-    @RequestMapping(path="/posts", method=RequestMethod.GET)
-    public HttpEntity<List<Post>> posts() {
-        List<Post> list = new ArrayList<>();
-
-        list.add(post);
-        list.add(post1);
-        list.add(post2);
-
-        post.add(linkTo(methodOn(GreetingRestController.class).posts()).withSelfRel());
-        post1.add(linkTo(methodOn(GreetingRestController.class).posts()).withSelfRel());
-        post2.add(linkTo(methodOn(GreetingRestController.class).posts()).withSelfRel());
-        ResponseEntity<List<Post>> response = new ResponseEntity<List<Post>>(list, HttpStatus.OK);
-
-        return response;
-    }
-
-
-    @RequestMapping(path="/post", method=RequestMethod.GET)
-    public HttpEntity<Post> onePost() {
-        post.add(linkTo(methodOn(GreetingRestController.class).onePost()).withSelfRel());
-
-        return new ResponseEntity<Post>(post, HttpStatus.OK); 
-    }
 
     @RequestMapping(path="/createCustomer", method=RequestMethod.GET)
     public HttpEntity<Customer> createCustomer(
