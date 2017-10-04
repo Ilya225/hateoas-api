@@ -1,12 +1,13 @@
 package com.example.hateoasapi.domain;
 
 import javax.persistence.Id;
+
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.mongodb.core.mapping.DBRef;
+import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.hateoas.ResourceSupport;
 import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 
 import static org.springframework.hateoas.mvc.ControllerLinkBuilder.*;
 
@@ -14,6 +15,7 @@ import java.io.Serializable;
 
 import com.example.hateoasapi.controller.*;
 
+@Document
 public class Post extends ResourceSupport implements Serializable {
 
     @Id
@@ -22,8 +24,12 @@ public class Post extends ResourceSupport implements Serializable {
     //private Category category;
     private String body;
     private String title;
-    private String created;
-    private String updated;
+
+    @CreatedDate
+    private Long createdDate;
+
+    @LastModifiedDate
+    private Long lastModifiedDate;
 
     public Post(String title, String body) {
         this.body = body;
@@ -53,12 +59,24 @@ public class Post extends ResourceSupport implements Serializable {
         this.title = title;
     }
 
-    /*public String getCreated() {
-        return this.created;
-    }*/
-
     public String get_Id() {
         return _id;
+    }
+
+    public void setCreatedDate(Long created) {
+        this.createdDate = created;
+    }
+
+    public Long getCreatedDate() {
+        return this.createdDate;
+    }
+
+    public void setLastModifiedDate(Long updated) {
+        this.lastModifiedDate =  updated;
+    }
+
+    public Long getLastModifiedDate() {
+        return this.lastModifiedDate;
     }
 
     /*public void setCategory(Category category) {

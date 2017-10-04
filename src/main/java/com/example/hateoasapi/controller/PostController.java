@@ -6,6 +6,7 @@ import com.example.hateoasapi.repository.PostRepository;
 
 import org.springframework.data.crossstore.ChangeSetPersister.NotFoundException;
 import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -18,7 +19,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 
-@CrossOrigin(origins = "http://localhost:4200")
+@CrossOrigin(origins = "http://localhost:4200", methods = {RequestMethod.DELETE, RequestMethod.POST, RequestMethod.GET, RequestMethod.PUT})
 @RequestMapping("/api")
 @RestController
 public class PostController {
@@ -49,5 +50,15 @@ public class PostController {
     public ResponseEntity<?> addPost(@RequestBody Post input) {
         postRepository.save(new Post(input.getTitle(), input.getBody()));
         return new ResponseEntity<>(HttpStatus.OK).noContent().build();
+    }
+
+    @RequestMapping(path="/post/delete/{id}", method=RequestMethod.DELETE)
+    public ResponseEntity<?> deletePost(@PathVariable String id) {
+        Optional<Post> optPost = postRepository.findById(id);
+        if(optPost.isPresent()) {
+            postRepository.delete(optPost.get());
+            return new ResponseEntity<Post>(optPost.get(), HttpStatus.OK);
+        }
+        return new ResponseEntity<>(HttpStatus.NOT_FOUND).noContent().build();
     }
 }
