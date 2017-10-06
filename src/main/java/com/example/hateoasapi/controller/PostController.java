@@ -1,7 +1,10 @@
 package com.example.hateoasapi.controller;
 
 import java.util.*;
+import java.util.stream.Collectors;
+
 import com.example.hateoasapi.domain.*;
+import com.example.hateoasapi.repository.CategoryRepository;
 import com.example.hateoasapi.repository.PostRepository;
 
 import org.springframework.data.crossstore.ChangeSetPersister.NotFoundException;
@@ -16,6 +19,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 
@@ -25,9 +29,13 @@ import org.springframework.web.bind.annotation.RestController;
 public class PostController {
 
     private PostRepository postRepository;
+    private CategoryRepository categoryRepository;
+
     public PostController(
-        PostRepository postRepository
+        PostRepository postRepository,
+        CategoryRepository categoryRepository
     ) {
+        this.categoryRepository = categoryRepository;
         this.postRepository = postRepository;
     }
 
@@ -50,6 +58,31 @@ public class PostController {
     public ResponseEntity<?> addPost(@RequestBody Post input) {
         postRepository.save(new Post(input.getTitle(), input.getBody()));
         return new ResponseEntity<>(HttpStatus.OK).noContent().build();
+    }
+
+    /**
+     * Create Post with ref to Category
+     */
+    @RequestMapping(path = "/create_post", method = { RequestMethod.GET })
+    public Post createPostGet(
+        @RequestParam(name = "title", required= true) String title,
+        @RequestParam(name = "body", required = true) String body,
+        @RequestParam(name = "category_id", required = true) String categoryId, 
+        @RequestParam(name = "tags[]", required = false) String[] tags
+        ) {
+            Optional optCategory = categoryRepository.findById(categoryId);
+            Post post = new Post(title, body);
+            List<PostTag> postTags = Arrays.asList(tags)
+                                            .stream()
+                                            .map(n -> new PostTag(n))
+                                            .collect(Collectors.toList());
+            optCategory.ifPresent((category) -> {
+                post.setCategory((Category) category);
+                post.setTags(postTags);
+                postRepository.save(post);
+            });
+            System.out.println(Arrays.asList(tags));
+            return post;
     }
 
     @RequestMapping(path="/post/delete/{id}", method=RequestMethod.DELETE)

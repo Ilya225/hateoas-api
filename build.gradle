@@ -32,6 +32,7 @@ dependencies {
 	compile('org.springframework.boot:spring-boot-starter-hateoas')
 	compile("org.springframework.boot:spring-boot-starter-data-mongodb")
 	compile group: 'joda-time', name: 'joda-time', version: '2.9.9'
+	compileOnly 'org.projectlombok:lombok:1.16.18'
 	//compile('org.springframework.boot:spring-boot-starter-security')
 	//compile('org.springframework.boot:spring-boot-starter-validation')
 	compile('org.springframework.boot:spring-boot-starter-web')
