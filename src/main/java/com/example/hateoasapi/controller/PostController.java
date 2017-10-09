@@ -24,7 +24,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 
-@CrossOrigin(origins = "http://localhost:4200", methods = {RequestMethod.DELETE, RequestMethod.POST, RequestMethod.GET, RequestMethod.PUT})
 @RequestMapping("/api")
 @RestController
 public class PostController {
@@ -45,7 +44,6 @@ public class PostController {
     @RequestMapping(path="/posts", method=RequestMethod.GET)
     public HttpEntity<List<Post>> getAllPosts(PostQuery postQuery) {
 
-        System.out.println(postQuery);
         List<Post> list = postService.queryAllPosts(postQuery, PostController.POSTS_PER_PAGE);
 
         return new ResponseEntity<List<Post>>(list, HttpStatus.OK);

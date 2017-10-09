@@ -2,11 +2,17 @@ package com.example.hateoasapi.config;
 
 import com.example.hateoasapi.security.JWTAuthenticationFilter;
 import com.example.hateoasapi.security.JWTLoginFilter;
+import com.example.hateoasapi.security.JwtAuthFilter;
 import com.example.hateoasapi.service.TokenAuthenticationService;
 import com.example.hateoasapi.service.impl.UserDetailsServiceImpl;
+
+import java.util.Collections;
+
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.ProviderManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -34,27 +40,35 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.csrf().disable().authorizeRequests()
-                .antMatchers(HttpMethod.POST, "/login")
+                .antMatchers("/login", "/register")
                 .permitAll()
                 .anyRequest().authenticated()
                 .and()
+                .addFilter(new JwtAuthFilter(authenticationManager(), tokenAuthenticationService))
                 .addFilterBefore(new JWTLoginFilter(
                         "/login",
                         authenticationManager(),
-                        tokenAuthenticationService), UsernamePasswordAuthenticationFilter.class)
-                .addFilterBefore(new JWTAuthenticationFilter("/api/**", tokenAuthenticationService),
-                        UsernamePasswordAuthenticationFilter.class);
+                        tokenAuthenticationService), UsernamePasswordAuthenticationFilter.class);
+                        /*.addFilterBefore(new JWTAuthenticationFilter(
+                            "/api/**",
+                            authenticationManager(), 
+                            tokenAuthenticationService),
+                        UsernamePasswordAuthenticationFilter.class);*/
     }
 
-    @Bean
+    /*@Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
-    }
+    }*/
 
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
         super.configure(auth);
-        auth.userDetailsService(userDetailsService).passwordEncoder(passwordEncoder());
+        /*auth.inMemoryAuthentication()
+                .withUser("Peter")
+                .password("admin")
+                .authorities("USER");*/
+        auth.userDetailsService(userDetailsService);//.passwordEncoder(passwordEncoder());
     }
 
 

@@ -7,6 +7,12 @@ public class UserRole implements GrantedAuthority {
 
     private String authority;
 
+    public UserRole() {}
+
+    public UserRole(String authority) {
+        this.authority = authority;
+    }
+
     @Override
     public String getAuthority() {
         return authority;

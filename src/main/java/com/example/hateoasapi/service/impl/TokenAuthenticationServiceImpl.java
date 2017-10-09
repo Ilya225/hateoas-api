@@ -35,7 +35,9 @@ public class TokenAuthenticationServiceImpl implements TokenAuthenticationServic
     @Override
     public Authentication getAuthentication(HttpServletRequest request) {
         String token = request.getHeader(HEADER_STRING);
-        if (token != null) {
+        if (token == null) {
+            throw new RuntimeException("JWT token is missing");
+        }
             // parse the token.
             String user = Jwts.parser()
                     .setSigningKey(SECRET)
@@ -43,10 +45,9 @@ public class TokenAuthenticationServiceImpl implements TokenAuthenticationServic
                     .getBody()
                     .getSubject();
 
-            return user != null ?
-                    new UsernamePasswordAuthenticationToken(user, null, emptyList()) :
-                    null;
-        }
-        return null;
+            if(user == null)
+                throw new RuntimeException("JWT token is invalid");
+
+            return new UsernamePasswordAuthenticationToken(user, "admin", emptyList());
     }
 }
