@@ -2,6 +2,7 @@ package com.example.hateoasapi.domain;
 
 import javax.persistence.Id;
 
+import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import lombok.Getter;
@@ -16,4 +17,8 @@ public class Comment {
     private String _id;
     private String message;
 
+    @DBRef
+    private Post post;
+
+    
 }

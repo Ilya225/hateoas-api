@@ -6,11 +6,13 @@ import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.data.mongodb.core.mapping.Field;
 import org.springframework.hateoas.ResourceSupport;
 import com.fasterxml.jackson.annotation.JsonCreator;
 
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 
 import static org.springframework.hateoas.mvc.ControllerLinkBuilder.*;
 
@@ -21,13 +23,15 @@ import com.example.hateoasapi.controller.*;
 
 @Getter
 @Setter
+@ToString
 @Document
 public class Post extends ResourceSupport implements Serializable {
 
     @Id
-    private String _id;
-    @DBRef
-    private Category category;
+    @Field(value = "_id")
+    private String objectId;
+    
+    private String categoryId;
 
     @DBRef
     private List<Comment> comments;
@@ -51,6 +55,6 @@ public class Post extends ResourceSupport implements Serializable {
     public Post() {}
 
     public void addLinks() {
-        this.add(linkTo(methodOn(PostController.class).getAllPosts()).withSelfRel());
+        this.add(linkTo(methodOn(PostController.class).getAllPosts(null)).withSelfRel());
     }
 }
