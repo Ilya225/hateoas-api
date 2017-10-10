@@ -30,15 +30,21 @@ public class Post extends ResourceSupport implements Serializable {
     @Id
     @Field(value = "_id")
     private String objectId;
-    
-    private String categoryId;
 
     @DBRef
     private List<Comment> comments;
 
+    @DBRef
+    private User author;
+
+    private Long views;
     private String body;
     private String title;
+    private String categoryId;
     private List<PostTag> tags;
+    private List<PostRating> likes;
+    private List<PostRating> dislikes;
+
 
     @CreatedDate
     private Long createdDate;

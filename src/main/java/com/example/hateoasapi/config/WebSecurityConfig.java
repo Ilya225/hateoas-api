@@ -49,11 +49,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                         "/login",
                         authenticationManager(),
                         tokenAuthenticationService), UsernamePasswordAuthenticationFilter.class);
-                        /*.addFilterBefore(new JWTAuthenticationFilter(
-                            "/api/**",
-                            authenticationManager(), 
-                            tokenAuthenticationService),
-                        UsernamePasswordAuthenticationFilter.class);*/
     }
 
     /*@Bean
@@ -64,10 +59,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
         super.configure(auth);
-        /*auth.inMemoryAuthentication()
-                .withUser("Peter")
-                .password("admin")
-                .authorities("USER");*/
         auth.userDetailsService(userDetailsService);//.passwordEncoder(passwordEncoder());
     }
 
