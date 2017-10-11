@@ -8,6 +8,7 @@ import com.example.hateoasapi.service.impl.UserDetailsServiceImpl;
 
 import java.util.Collections;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -51,15 +52,15 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                         tokenAuthenticationService), UsernamePasswordAuthenticationFilter.class);
     }
 
-    /*@Bean
+    @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
-    }*/
+    }
 
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
         super.configure(auth);
-        auth.userDetailsService(userDetailsService);//.passwordEncoder(passwordEncoder());
+        auth.userDetailsService(userDetailsService).passwordEncoder(passwordEncoder());
     }
 
 

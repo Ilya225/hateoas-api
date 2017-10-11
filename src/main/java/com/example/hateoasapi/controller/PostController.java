@@ -14,6 +14,7 @@ import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -60,9 +61,10 @@ public class PostController {
     }
 
     @RequestMapping(path="/post/create", method=RequestMethod.POST)
-    public ResponseEntity<?> addPost(@RequestBody Post input) {
-        postService.save(new Post(input.getTitle(), input.getBody()));
-        return new ResponseEntity<>(HttpStatus.OK).noContent().build();
+    public ResponseEntity<?> addPost(Authentication auth, @RequestBody Post input) {
+        System.out.println(auth.getPrincipal());
+        postService.save(input);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
     /**

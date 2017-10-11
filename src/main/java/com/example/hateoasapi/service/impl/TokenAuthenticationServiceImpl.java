@@ -2,6 +2,7 @@ package com.example.hateoasapi.service.impl;
 
 
 import com.example.hateoasapi.service.TokenAuthenticationService;
+import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -24,6 +25,10 @@ public class TokenAuthenticationServiceImpl implements TokenAuthenticationServic
 
     @Override
     public void addAuthentication(HttpServletResponse res, String username) {
+
+        /*Claims claims = Jwts.claims()
+                .put("userId", )*/
+
         String JWT = Jwts.builder()
                 .setSubject(username)
                 .setExpiration(new Date(System.currentTimeMillis() + EXPIRATIONTIME))

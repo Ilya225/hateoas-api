@@ -52,13 +52,21 @@ public class Post extends ResourceSupport implements Serializable {
     @LastModifiedDate
     private Long lastModifiedDate;
 
+    @JsonCreator
+    public Post() {}
+
     public Post(String title, String body) {
         this.body = body;
         this.title = title;
     }
 
-    @JsonCreator
-    public Post() {}
+    public Post(User author, String body, String title, String categoryId, List<PostTag> tags) {
+        this.author = author;
+        this.body = body;
+        this.title = title;
+        this.categoryId = categoryId;
+        this.tags = tags;
+    }
 
     public void addLinks() {
         this.add(linkTo(methodOn(PostController.class).getAllPosts(null)).withSelfRel());

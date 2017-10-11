@@ -1,5 +1,6 @@
 package com.example.hateoasapi.domain;
 
+import lombok.Setter;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -9,6 +10,7 @@ import lombok.ToString;
 import javax.persistence.Id;
 import java.util.Collection;
 
+@Setter
 @Document
 @ToString
 public class User implements UserDetails {
@@ -24,10 +26,6 @@ public class User implements UserDetails {
     @Override
     public Collection<? extends UserRole> getAuthorities() {
         return authorities;
-    }
-
-    public void setAuthorities(Collection<? extends UserRole> authorities) {
-        this.authorities = authorities;
     }
 
     @Override
