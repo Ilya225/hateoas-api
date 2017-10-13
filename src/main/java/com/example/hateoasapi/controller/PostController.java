@@ -3,6 +3,8 @@ package com.example.hateoasapi.controller;
 import java.util.*;
 import java.util.stream.Collectors;
 
+import javax.validation.Valid;
+
 import com.example.hateoasapi.domain.*;
 import com.example.hateoasapi.repository.CategoryRepository;
 import com.example.hateoasapi.service.PostService;
@@ -61,7 +63,7 @@ public class PostController {
     }
 
     @RequestMapping(path="/post/create", method=RequestMethod.POST)
-    public ResponseEntity<?> addPost(Authentication auth, @RequestBody Post input) {
+    public ResponseEntity<?> addPost(Authentication auth, @Valid @RequestBody Post input) {
         User user = (User) auth.getPrincipal();
         input.setAuthor(user);
         postService.save(input);
@@ -94,8 +96,8 @@ public class PostController {
     }
 
     @RequestMapping(path="/post/delete/{id}", method=RequestMethod.DELETE)
-    public ResponseEntity<?> deletePost(@PathVariable String id) {
-        //TODO delete by ID
+    public ResponseEntity<?> deletePost(Authentication auth, @PathVariable String id) {
+        
         Optional<Post> optPost = postService.findById(id);
         if(optPost.isPresent()) {
             postService.delete(optPost.get());

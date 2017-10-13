@@ -1,6 +1,9 @@
 package com.example.hateoasapi.domain;
 
 import javax.persistence.Id;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
@@ -37,20 +40,27 @@ public class Post extends ResourceSupport implements Serializable {
     @DBRef
     private User author;
 
-    private Long views;
+    @NotBlank
     private String body;
-    private String title;
-    private String categoryId;
-    private List<PostTag> tags;
-    private List<PostRating> likes;
-    private List<PostRating> dislikes;
 
+    @NotBlank
+    private String title;
+    
+    private String categoryId;
+
+    @NotEmpty(message = "tags cannot be empty")
+    private List<PostTag> tags;
 
     @CreatedDate
     private Long createdDate;
 
     @LastModifiedDate
     private Long lastModifiedDate;
+
+    private Long views;    
+    private List<PostRating> likes;
+    private List<PostRating> dislikes;
+
 
     @JsonCreator
     public Post() {}
