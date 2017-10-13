@@ -1,12 +1,14 @@
 package com.example.hateoasapi.service.impl;
 
 
+import com.example.hateoasapi.domain.User;
 import com.example.hateoasapi.service.TokenAuthenticationService;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletRequest;
@@ -22,6 +24,12 @@ public class TokenAuthenticationServiceImpl implements TokenAuthenticationServic
     static final String SECRET = "ThisIsASecret";
     static final String TOKEN_PREFIX = "Bearer";
     static final String HEADER_STRING = "Authorization";
+
+    private UserDetailsService userDetailsService;
+
+    public TokenAuthenticationServiceImpl(UserDetailsService userDetailsService) {
+        this.userDetailsService = userDetailsService;
+    }
 
     @Override
     public void addAuthentication(HttpServletResponse res, String username) {
@@ -44,15 +52,17 @@ public class TokenAuthenticationServiceImpl implements TokenAuthenticationServic
             throw new RuntimeException("JWT token is missing");
         }
             // parse the token.
-            String user = Jwts.parser()
+            String username = Jwts.parser()
                     .setSigningKey(SECRET)
                     .parseClaimsJws(token.replace(TOKEN_PREFIX, ""))
                     .getBody()
                     .getSubject();
 
+        User user = (User) userDetailsService.loadUserByUsername(username);
+
             if(user == null)
                 throw new RuntimeException("JWT token is invalid");
 
-            return new UsernamePasswordAuthenticationToken(user, "admin", emptyList());
+            return new UsernamePasswordAuthenticationToken(user, null, emptyList());
     }
 }

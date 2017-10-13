@@ -15,6 +15,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -44,7 +45,6 @@ public class PostController {
 
     @RequestMapping(path="/posts", method=RequestMethod.GET)
     public HttpEntity<List<Post>> getAllPosts(PostQuery postQuery) {
-
         List<Post> list = postService.queryAllPosts(postQuery, PostController.POSTS_PER_PAGE);
 
         return new ResponseEntity<List<Post>>(list, HttpStatus.OK);
@@ -62,7 +62,8 @@ public class PostController {
 
     @RequestMapping(path="/post/create", method=RequestMethod.POST)
     public ResponseEntity<?> addPost(Authentication auth, @RequestBody Post input) {
-        System.out.println(auth.getPrincipal());
+        User user = (User) auth.getPrincipal();
+        input.setAuthor(user);
         postService.save(input);
         return new ResponseEntity<>(HttpStatus.OK);
     }
