@@ -1,6 +1,7 @@
 .gradle/
 .idea/
 .settings/
+application.properties
 .vscode/
 bin/
 build/

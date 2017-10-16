@@ -1,6 +1,8 @@
 package com.example.hateoasapi.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Setter;
+import org.springframework.data.annotation.Transient;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -8,6 +10,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import lombok.ToString;
 
 import javax.persistence.Id;
+import javax.validation.constraints.Email;
 import java.util.Collection;
 
 @Setter
@@ -19,8 +22,15 @@ public class User implements UserDetails {
     @Field("_id")
     private String objectId;
 
+    @Email
+    private String email;
+    private boolean enabled;
+    private boolean locked;
     private String username;
+    @JsonIgnore
     private String password;
+
+    @JsonIgnore
     private Collection<? extends UserRole> authorities;
 
     @Override
@@ -45,7 +55,7 @@ public class User implements UserDetails {
 
     @Override
     public boolean isAccountNonLocked() {
-        return true;
+        return !locked;
     }
 
     @Override
@@ -55,6 +65,6 @@ public class User implements UserDetails {
 
     @Override
     public boolean isEnabled() {
-        return true;
+        return enabled;
     }
 }

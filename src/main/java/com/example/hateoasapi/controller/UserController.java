@@ -1,44 +1,58 @@
 package com.example.hateoasapi.controller;
 
-import java.util.Arrays;
-import java.util.Collections;
 
+import com.example.hateoasapi.model.RegisterForm;
+import com.example.hateoasapi.service.AccountService;
+import com.example.hateoasapi.service.StorageService;
+import com.example.hateoasapi.utils.exception.StorageFileNotFoundException;
+import org.springframework.core.io.Resource;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
-import com.example.hateoasapi.domain.User;
-import com.example.hateoasapi.domain.UserRole;
-import com.example.hateoasapi.repository.UserRepository;
+import javax.validation.Valid;
 
 @RestController
 public class UserController {
 
-    private UserRepository userRepository;
-    private PasswordEncoder passwordEncoder;
+    private AccountService accountService;
+    private StorageService storageService;
 
     public UserController(
-            PasswordEncoder passwordEncoder,
-            UserRepository userRepository
+            AccountService accountService,
+            StorageService storageService
     ) {
-        this.passwordEncoder = passwordEncoder;
-        this.userRepository = userRepository;
+        this.accountService = accountService;
+        this.storageService = storageService;
     }
 
     @PostMapping(path = "/register") 
-    public ResponseEntity<?> createUser(@RequestBody User user) {
+    public ResponseEntity<?> createUser(@Valid @RequestBody RegisterForm input) {
+        System.out.println(input);
+        accountService.registerUser(input.getUsername(), input.getEmail(), input.getPassword());
 
-        if(user.getAuthorities() == null) {
-            user.setAuthorities(Arrays.asList(new UserRole[]{ new UserRole("USER")}));
-        }
-        String encPass = passwordEncoder.encode(user.getPassword());
-        user.setPassword(encPass);
-
-        userRepository.save(user);
         return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @PostMapping(path = "/upload-avatar")
+    public ResponseEntity<?> uploadAvatar(@RequestParam("file") MultipartFile file) {
+
+        storageService.store(file);
+
+        return ResponseEntity.ok("Upload image path");
+    }
+
+    @GetMapping(path = "/avatars/{filename}.{extension:[a-zA-Z]{3,4}}")
+    public ResponseEntity<?> loadAvatar(
+            @PathVariable String filename,
+            @PathVariable String extension
+    ) {
+        try {
+            Resource file = storageService.loadAsResource(filename + "." + extension);
+            return ResponseEntity.ok(file);
+        } catch (StorageFileNotFoundException e) {
+            return ResponseEntity.notFound().build();
+        }
     }
 }

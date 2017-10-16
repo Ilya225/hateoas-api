@@ -4,7 +4,7 @@ import java.util.List;
 import java.util.Optional;
 
 import com.example.hateoasapi.domain.Post;
-import com.example.hateoasapi.webform.PostQuery;
+import com.example.hateoasapi.model.PostQuery;
 
 public interface PostService {
 

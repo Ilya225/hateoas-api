@@ -1,4 +1,4 @@
-package com.example.hateoasapi.webform;
+package com.example.hateoasapi.model;
 
 import java.util.List;
 

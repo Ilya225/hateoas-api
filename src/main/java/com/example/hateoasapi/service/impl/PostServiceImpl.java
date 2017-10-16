@@ -14,7 +14,7 @@ import org.springframework.stereotype.Service;
 import com.example.hateoasapi.domain.Post;
 import com.example.hateoasapi.repository.PostRepository;
 import com.example.hateoasapi.service.PostService;
-import com.example.hateoasapi.webform.PostQuery;
+import com.example.hateoasapi.model.PostQuery;
 
 @Service
 public class PostServiceImpl implements PostService {
