@@ -2,7 +2,6 @@ package com.example.hateoasapi.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Setter;
-import org.springframework.data.annotation.Transient;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -10,7 +9,6 @@ import org.springframework.security.core.userdetails.UserDetails;
 import lombok.ToString;
 
 import javax.persistence.Id;
-import javax.validation.constraints.Email;
 import java.util.Collection;
 
 @Setter
@@ -22,7 +20,6 @@ public class User implements UserDetails {
     @Field("_id")
     private String objectId;
 
-    @Email
     private String email;
     private boolean enabled;
     private boolean locked;
