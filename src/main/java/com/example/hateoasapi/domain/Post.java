@@ -3,8 +3,9 @@ package com.example.hateoasapi.domain;
 import javax.persistence.Id;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.NotNull;
 
+import org.joda.time.DateTime;
+import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.mongodb.core.mapping.DBRef;
@@ -48,14 +49,17 @@ public class Post extends ResourceSupport implements Serializable {
     
     private String categoryId;
 
-    @NotEmpty(message = "tags cannot be empty")
+    @NotEmpty(message = "Tags cannot be empty")
     private List<PostTag> tags;
 
     @CreatedDate
-    private Long createdDate;
+    private DateTime createdDate;
 
     @LastModifiedDate
-    private Long lastModifiedDate;
+    private DateTime lastModifiedDate;
+
+    @CreatedBy
+    private User createdBy;
 
     private Long views;    
     private List<PostRating> likes;

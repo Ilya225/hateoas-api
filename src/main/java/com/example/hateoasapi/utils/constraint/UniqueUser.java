@@ -1,19 +1,19 @@
 package com.example.hateoasapi.utils.constraint;
 
-
-
-import com.example.hateoasapi.utils.validator.UniqueEmailValidator;
+import com.example.hateoasapi.utils.validator.UniqueUserValidator;
 
 import javax.validation.Constraint;
 import javax.validation.Payload;
 import java.lang.annotation.*;
 
 @Documented
-@Constraint(validatedBy = UniqueEmailValidator.class)
+@Constraint(validatedBy = UniqueUserValidator.class)
 @Target({ ElementType.METHOD, ElementType.FIELD})
 @Retention(RetentionPolicy.RUNTIME)
-public @interface UniqueEmail {
-    String message() default "Email already in use";
+public @interface UniqueUser {
+    String message() default "Such user already exist";
+
+    String field() default "email";
 
     Class<?>[] groups() default { };
 

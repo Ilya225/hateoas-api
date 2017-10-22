@@ -1,6 +1,6 @@
 package com.example.hateoasapi.model;
 
-import com.example.hateoasapi.utils.constraint.UniqueEmail;
+import com.example.hateoasapi.utils.constraint.UniqueUser;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -15,10 +15,11 @@ import javax.validation.constraints.Size;
 public class RegisterForm {
 
     @Email
-    @UniqueEmail
+    @UniqueUser(message = "Email already in use")
     private String email;
 
     @NotBlank
+    @UniqueUser(field = "username")
     private String username;
 
     @Size(min = 8)

@@ -9,7 +9,7 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface PostRepository extends MongoRepository<Post, String> {
-    public Post findByTitle(String title);
+    Post findByTitle(String title);
 
-    public List<Post> findByCategoryId(String id);
+    List<Post> findByCategoryId(String id);
 }

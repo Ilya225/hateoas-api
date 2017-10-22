@@ -70,13 +70,14 @@ public class PostController {
      */
     @RequestMapping(path = "/create_post", method = { RequestMethod.GET })
     public Post createPostGet(
-        @RequestParam(name = "title", required= true) String title,
-        @RequestParam(name = "body", required = true) String body,
-        @RequestParam(name = "category_id", required = true) String categoryId, 
-        @RequestParam(name = "tags[]", required = false) String[] tags
+        @RequestParam(name = "title") String title,
+        @RequestParam(name = "body") String body,
+        @RequestParam(name = "category_id") String categoryId,
+        @RequestParam(name = "tags[]") String[] tags
         ) {
             Optional<Category> optCategory = categoryRepository.findById(categoryId);
             Post post = new Post(title, body);
+
             List<PostTag> postTags = Arrays.asList(tags)
                                             .stream()
                                             .map(n -> new PostTag(n))
@@ -92,7 +93,7 @@ public class PostController {
 
     @RequestMapping(path="/post/delete/{id}", method=RequestMethod.DELETE)
     public ResponseEntity<?> deletePost(Authentication auth, @PathVariable String id) {
-        
+
         Optional<Post> optPost = postService.findById(id);
         if(optPost.isPresent()) {
             postService.delete(optPost.get());

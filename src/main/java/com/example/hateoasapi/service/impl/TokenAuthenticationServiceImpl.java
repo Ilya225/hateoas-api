@@ -3,6 +3,7 @@ package com.example.hateoasapi.service.impl;
 
 import com.example.hateoasapi.domain.User;
 import com.example.hateoasapi.service.TokenAuthenticationService;
+import com.example.hateoasapi.utils.exception.JwtTokenException;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -49,7 +50,7 @@ public class TokenAuthenticationServiceImpl implements TokenAuthenticationServic
     public Authentication getAuthentication(HttpServletRequest request) {
         String token = request.getHeader(HEADER_STRING);
         if (token == null) {
-            throw new RuntimeException("JWT token is missing");
+            throw new JwtTokenException("JWT token is missing");
         }
             // parse the token.
             String username = Jwts.parser()
@@ -61,7 +62,7 @@ public class TokenAuthenticationServiceImpl implements TokenAuthenticationServic
         User user = (User) userDetailsService.loadUserByUsername(username);
 
             if(user == null)
-                throw new RuntimeException("JWT token is invalid");
+                throw new JwtTokenException("JWT token is invalid");
 
             return new UsernamePasswordAuthenticationToken(user, null, emptyList());
     }
