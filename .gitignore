@@ -3,6 +3,7 @@
 .settings/
 application.properties
 .vscode/
+.env
 bin/
 build/
 .project
