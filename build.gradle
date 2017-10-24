@@ -36,6 +36,8 @@ dependencies {
 	compile('org.springframework.boot:spring-boot-starter-hateoas')
 	compile("org.springframework.boot:spring-boot-starter-data-mongodb")
 
+	compile group: 'net.sourceforge.htmlunit', name: 'htmlunit', version:"2.27"
+
 	compile group: 'joda-time', name: 'joda-time', version: '2.9.9'
 	compileOnly 'org.projectlombok:lombok:1.16.18'
 	compile group: 'io.jsonwebtoken', name: 'jjwt', version: '0.6.0'
