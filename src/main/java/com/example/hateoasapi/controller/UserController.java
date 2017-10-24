@@ -42,6 +42,11 @@ public class UserController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
+    @PostMapping(path = "/login")
+    public ResponseEntity<?> login() {
+        return new ResponseEntity<>("Successfully login", HttpStatus.OK);
+    }
+
     @PostMapping(path = "/upload-avatar")
     public ResponseEntity<?> uploadAvatar(@RequestParam("file") MultipartFile file) {
 

@@ -46,7 +46,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .addFilterBefore(new JWTLoginFilter(
                         "/login",
                         authenticationManager(),
-                        tokenAuthenticationService), UsernamePasswordAuthenticationFilter.class);
+                        tokenAuthenticationService), UsernamePasswordAuthenticationFilter.class)
+                .csrf().disable();
     }
 
     @Bean
