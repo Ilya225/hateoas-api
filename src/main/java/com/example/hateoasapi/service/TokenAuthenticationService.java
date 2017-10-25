@@ -11,4 +11,6 @@ public interface TokenAuthenticationService {
     void addAuthentication(HttpServletResponse res, String username);
 
     Authentication getAuthentication(HttpServletRequest request);
+
+    String generateToken(Authentication authentication);
 }

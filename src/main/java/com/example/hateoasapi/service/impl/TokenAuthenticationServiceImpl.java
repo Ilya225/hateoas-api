@@ -1,10 +1,9 @@
 package com.example.hateoasapi.service.impl;
 
-
+import com.example.hateoasapi.config.JwtProperties;
 import com.example.hateoasapi.domain.User;
 import com.example.hateoasapi.service.TokenAuthenticationService;
 import com.example.hateoasapi.utils.exception.JwtTokenException;
-import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -21,29 +20,40 @@ import static java.util.Collections.emptyList;
 @Service
 public class TokenAuthenticationServiceImpl implements TokenAuthenticationService {
 
-    static final long EXPIRATIONTIME = 864_000_000; // 10 days
-    static final String SECRET = "ThisIsASecret";
     static final String TOKEN_PREFIX = "Bearer";
     static final String HEADER_STRING = "Authorization";
 
     private UserDetailsService userDetailsService;
+    private JwtProperties jwtProperties;
 
-    public TokenAuthenticationServiceImpl(UserDetailsService userDetailsService) {
+    public TokenAuthenticationServiceImpl(
+            UserDetailsService userDetailsService,
+            JwtProperties jwtProperties
+    ) {
         this.userDetailsService = userDetailsService;
+        this.jwtProperties = jwtProperties;
     }
 
     @Override
     public void addAuthentication(HttpServletResponse res, String username) {
 
-        /*Claims claims = Jwts.claims()
-                .put("userId", )*/
-
         String JWT = Jwts.builder()
                 .setSubject(username)
-                .setExpiration(new Date(System.currentTimeMillis() + EXPIRATIONTIME))
-                .signWith(SignatureAlgorithm.HS512, SECRET)
+                .setExpiration(new Date(System.currentTimeMillis() + jwtProperties.getExpirationMillis()))
+                .signWith(SignatureAlgorithm.HS512, jwtProperties.getSecret())
                 .compact();
         res.addHeader(HEADER_STRING, TOKEN_PREFIX + " " + JWT);
+    }
+
+    @Override
+    public String generateToken(Authentication authentication) {
+        User user = (User) authentication.getPrincipal();
+        System.out.println(jwtProperties);
+        return Jwts.builder()
+                .setSubject(user.getUsername())
+                .setExpiration(new Date(System.currentTimeMillis() + jwtProperties.getExpirationMillis()))
+                .signWith(SignatureAlgorithm.HS512, jwtProperties.getSecret())
+                .compact();
     }
 
     @Override
@@ -54,7 +64,7 @@ public class TokenAuthenticationServiceImpl implements TokenAuthenticationServic
         }
             // parse the token.
             String username = Jwts.parser()
-                    .setSigningKey(SECRET)
+                    .setSigningKey(jwtProperties.getSecret())
                     .parseClaimsJws(token.replace(TOKEN_PREFIX, ""))
                     .getBody()
                     .getSubject();

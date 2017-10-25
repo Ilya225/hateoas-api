@@ -1,21 +1,21 @@
 package com.example.hateoasapi.config;
 
 import com.example.hateoasapi.security.ExceptionHandlerFilter;
-import com.example.hateoasapi.security.JWTLoginFilter;
 import com.example.hateoasapi.security.JwtAuthFilter;
 import com.example.hateoasapi.service.TokenAuthenticationService;
 import com.example.hateoasapi.service.impl.UserDetailsServiceImpl;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.csrf.CsrfFilter;
 
 @Configuration
@@ -43,16 +43,20 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .addFilterBefore(new ExceptionHandlerFilter(), CsrfFilter.class)
                 .addFilter(new ExceptionHandlerFilter())
                 .addFilter(new JwtAuthFilter(authenticationManager(), tokenAuthenticationService))
-                .addFilterBefore(new JWTLoginFilter(
-                        "/login",
-                        authenticationManager(),
-                        tokenAuthenticationService), UsernamePasswordAuthenticationFilter.class)
-                .csrf().disable();
+                .sessionManagement()
+                .sessionCreationPolicy(
+                        SessionCreationPolicy.STATELESS
+                );
     }
 
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
+    }
+
+    @Bean
+    public AuthenticationManager getAuthenticationManager() throws Exception {
+        return authenticationManager();
     }
 
     @Override

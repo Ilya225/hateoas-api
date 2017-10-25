@@ -2,6 +2,7 @@
 .idea/
 .settings/
 application.properties
+jwt.properties
 .vscode/
 .env
 bin/
