@@ -1,6 +1,6 @@
 buildscript {
 	ext {
-		springBootVersion = '2.0.0.BUILD-SNAPSHOT'
+		springBootVersion = '2.0.0.M5'
 	}
 	repositories {
 		mavenCentral()
@@ -35,7 +35,6 @@ dependencies {
 	compile('org.springframework.boot:spring-boot-starter-mail')
 	compile('org.springframework.boot:spring-boot-starter-hateoas')
 	compile("org.springframework.boot:spring-boot-starter-data-mongodb")
-
 	compile group: 'joda-time', name: 'joda-time', version: '2.9.9'
 	compileOnly 'org.projectlombok:lombok:1.16.18'
 	compile group: 'io.jsonwebtoken', name: 'jjwt', version: '0.6.0'
@@ -46,3 +45,10 @@ dependencies {
 	testCompile('org.springframework.boot:spring-boot-starter-test')
 	testCompile('org.springframework.security:spring-security-test')
 }
+
+task dockerComposeUpDev(type: Exec) {
+	commandLine 'docker-compose'
+	args = [ '-f', 'docker-compose.dev.yml', 'up', '-d' ]
+}
+
+tasks.bootRun.dependsOn(dockerComposeUpDev)

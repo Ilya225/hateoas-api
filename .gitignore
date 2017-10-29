@@ -2,7 +2,10 @@
 .idea/
 .settings/
 application.properties
+jwt.properties
+cors.properties
 .vscode/
+.env
 bin/
 build/
 .project

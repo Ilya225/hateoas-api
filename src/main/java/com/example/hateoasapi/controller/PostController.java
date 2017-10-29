@@ -60,8 +60,13 @@ public class PostController {
     @RequestMapping(path="/post/create", method=RequestMethod.POST)
     public ResponseEntity<?> addPost(Authentication auth, @Valid @RequestBody Post input) {
         User user = (User) auth.getPrincipal();
-        input.setAuthor(user);
-        postService.save(input);
+        Post post = new Post(
+                user,
+                input.getTitle(),
+                input.getBody(),
+                input.getCategoryId(),
+                input.getTags());
+        postService.save(post);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
