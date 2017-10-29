@@ -2,8 +2,11 @@ package com.example.hateoasapi.controller;
 
 import com.example.hateoasapi.domain.User;
 import com.example.hateoasapi.domain.VerificationToken;
+import com.example.hateoasapi.model.AccountCredentials;
+import com.example.hateoasapi.model.JwtToken;
 import com.example.hateoasapi.model.RegisterForm;
 import com.example.hateoasapi.service.AccountService;
+import com.example.hateoasapi.service.JwtAuthenticationService;
 import com.example.hateoasapi.service.StorageService;
 import com.example.hateoasapi.utils.event.OnUserRegisterEvent;
 import com.example.hateoasapi.utils.exception.StorageFileNotFoundException;
@@ -22,15 +25,18 @@ public class UserController {
     private AccountService accountService;
     private StorageService storageService;
     private ApplicationEventPublisher eventPublisher;
+    private JwtAuthenticationService jwtAuthenticationService;
 
     public UserController(
             AccountService accountService,
             StorageService storageService,
-            ApplicationEventPublisher applicationEventPublisher
+            ApplicationEventPublisher applicationEventPublisher,
+            JwtAuthenticationService jwtAuthenticationService
     ) {
         this.accountService = accountService;
         this.storageService = storageService;
         this.eventPublisher = applicationEventPublisher;
+        this.jwtAuthenticationService = jwtAuthenticationService;
     }
 
     @PostMapping(path = "/register")
@@ -40,6 +46,13 @@ public class UserController {
         eventPublisher.publishEvent(new OnUserRegisterEvent(user));
 
         return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @PostMapping(path = "/login")
+    public ResponseEntity<?> login(@RequestBody AccountCredentials accountCredentials) {
+        JwtToken jwtToken = jwtAuthenticationService.retrieveJwtToken(accountCredentials);
+
+        return new ResponseEntity<>(jwtToken, HttpStatus.OK);
     }
 
     @PostMapping(path = "/upload-avatar")

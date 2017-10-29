@@ -1,16 +1,15 @@
 package com.example.hateoasapi.domain;
 
 import javax.persistence.Id;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotEmpty;
 
+import org.hibernate.validator.constraints.NotBlank;
+import org.hibernate.validator.constraints.NotEmpty;
 import org.joda.time.DateTime;
 import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
-import org.springframework.data.mongodb.core.mapping.Field;
 import org.springframework.hateoas.ResourceSupport;
 import com.fasterxml.jackson.annotation.JsonCreator;
 
@@ -32,8 +31,7 @@ import com.example.hateoasapi.controller.*;
 public class Post extends ResourceSupport implements Serializable {
 
     @Id
-    @Field(value = "_id")
-    private String objectId;
+    private String _id;
 
     @DBRef
     private List<Comment> comments;
@@ -46,7 +44,8 @@ public class Post extends ResourceSupport implements Serializable {
 
     @NotBlank
     private String title;
-    
+
+    @NotBlank
     private String categoryId;
 
     @NotEmpty(message = "Tags cannot be empty")
@@ -61,20 +60,38 @@ public class Post extends ResourceSupport implements Serializable {
     @CreatedBy
     private User createdBy;
 
-    private Long views;    
+    private Long views;
     private List<PostRating> likes;
     private List<PostRating> dislikes;
 
 
     @JsonCreator
-    public Post() {}
+    public Post() {
+    }
 
     public Post(String title, String body) {
         this.body = body;
         this.title = title;
     }
 
-    public Post(User author, String body, String title, String categoryId, List<PostTag> tags) {
+    public Post(
+            String body,
+            String title,
+            String categoryId,
+            List<PostTag> tags
+    ) {
+        this.body = body;
+        this.title = title;
+        this.categoryId = categoryId;
+        this.tags = tags;
+    }
+
+    public Post(
+            User author,
+            String title,
+            String body,
+            String categoryId,
+            List<PostTag> tags) {
         this.author = author;
         this.body = body;
         this.title = title;

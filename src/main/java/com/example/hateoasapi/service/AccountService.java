@@ -7,6 +7,8 @@ public interface AccountService {
 
     User registerUser(String username, String email, String password);
 
+
+
     String generateToken();
 
     VerificationToken createVerificationToken(User user);

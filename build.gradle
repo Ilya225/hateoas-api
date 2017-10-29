@@ -1,6 +1,6 @@
 buildscript {
 	ext {
-		springBootVersion = '2.0.0.BUILD-SNAPSHOT'
+		springBootVersion = '2.0.0.M5'
 	}
 	repositories {
 		mavenCentral()
@@ -48,3 +48,10 @@ dependencies {
 	testCompile('org.springframework.boot:spring-boot-starter-test')
 	testCompile('org.springframework.security:spring-security-test')
 }
+
+task dockerComposeUpDev(type: Exec) {
+	commandLine 'docker-compose'
+	args = [ '-f', 'docker-compose.dev.yml', 'up', '-d' ]
+}
+
+tasks.bootRun.dependsOn(dockerComposeUpDev)
