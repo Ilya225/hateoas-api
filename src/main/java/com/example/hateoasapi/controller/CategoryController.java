@@ -37,7 +37,7 @@ public class CategoryController {
     }
 
     /**
-     * Create Category via GET request
+     * Create Category via GET model
      */
     @RequestMapping(path = "/create_category", method = { RequestMethod.GET })
     public Category createCategoryGet(@RequestParam(name = "name", required = true) String name) {

@@ -24,6 +24,7 @@ public class User implements UserDetails {
     private boolean enabled;
     private boolean locked;
     private String username;
+    private UserProfile userProfile;
     @JsonIgnore
     private String password;
 
@@ -63,5 +64,9 @@ public class User implements UserDetails {
     @Override
     public boolean isEnabled() {
         return enabled;
+    }
+
+    public enum UniqueUserFields {
+        email, username
     }
 }

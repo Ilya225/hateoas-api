@@ -1,6 +1,5 @@
 package com.example.hateoasapi.utils.validator;
 
-
 import com.example.hateoasapi.domain.User;
 import com.example.hateoasapi.repository.UserRepository;
 import com.example.hateoasapi.utils.constraint.UniqueUser;
@@ -11,7 +10,7 @@ import javax.validation.ConstraintValidatorContext;
 import java.lang.annotation.Annotation;
 
 @Component
-public class UniqueUserValidator implements ConstraintValidator<Annotation, String> {
+public class UniqueUserValidator implements ConstraintValidator<UniqueUser, String> {
 
     private UserRepository userRepository;
     private UniqueUser uniqueUser;
@@ -21,24 +20,26 @@ public class UniqueUserValidator implements ConstraintValidator<Annotation, Stri
     }
 
     @Override
-    public void initialize(Annotation constraintAnnotation) {
-        this.uniqueUser = (UniqueUser) constraintAnnotation;
+    public void initialize(UniqueUser constraintAnnotation) {
+        this.uniqueUser = constraintAnnotation;
     }
 
     @Override
     public boolean isValid(String value, ConstraintValidatorContext context) {
         User user = null;
-        switch(uniqueUser.field()) {
-            case "email":
+        User.UniqueUserFields uniqueField = User.UniqueUserFields.valueOf(uniqueUser.field());
+
+        switch (uniqueField) {
+            case email:
                 user = userRepository.findByEmail(value);
                 break;
-            case "username":
+            case username:
                 user = userRepository.findByUsername(value);
                 break;
             default:
                 return false;
         }
-        if(user != null) {
+        if (user != null) {
             return false;
         }
         return true;

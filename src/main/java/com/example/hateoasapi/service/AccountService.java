@@ -7,7 +7,7 @@ public interface AccountService {
 
     User registerUser(String username, String email, String password);
 
-
+    void saveUserProfile();
 
     String generateToken();
 
