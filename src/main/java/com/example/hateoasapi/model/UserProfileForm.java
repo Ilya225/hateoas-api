@@ -23,6 +23,9 @@ public class UserProfileForm {
     @NotBlank
     private String lastName;
 
-    @Image(extensions = { ImageExtension.JPG })
+    @Size(min=7, max=12)
+    private String phone;
+
+    //@Image(extensions = { ImageExtension.JPG })
     private MultipartFile avatar;
 }

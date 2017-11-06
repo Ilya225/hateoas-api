@@ -1,6 +1,7 @@
 package com.example.hateoasapi.controller;
 
 import com.example.hateoasapi.model.UserProfileForm;
+import com.example.hateoasapi.service.UserProfileService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -14,8 +15,12 @@ import javax.validation.Valid;
 @RequestMapping(path = "api/user/profile")
 public class UserProfileController {
 
-    public UserProfileController() {
+    private UserProfileService userProfileService;
 
+    public UserProfileController(
+            UserProfileService userProfileService
+    ) {
+        this.userProfileService = userProfileService;
     }
 
     public ResponseEntity<?> showProfile() {
@@ -23,10 +28,10 @@ public class UserProfileController {
     }
 
     @RequestMapping(path = "/save", method = { RequestMethod.POST })
-    public ResponseEntity<?> saveProfile(Authentication auth, @Valid UserProfileForm userProfileForm) {
-        System.out.println(auth);
+    public ResponseEntity<?> saveProfile(@Valid UserProfileForm userProfileForm) {
 
-        System.out.println(userProfileForm);
+        userProfileService.save(userProfileForm);
+
         return ResponseEntity.noContent().build();
     }
 }

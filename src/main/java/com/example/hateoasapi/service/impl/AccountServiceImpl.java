@@ -75,9 +75,4 @@ public class AccountServiceImpl implements AccountService {
         user.setEnabled(true);
         userRepository.save(user);
     }
-
-    @Override
-    public void saveUserProfile() {
-
-    }
 }
