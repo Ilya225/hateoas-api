@@ -5,14 +5,14 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class RestErrorModel {
+public class ApiResponse {
 
     private String message;
     private int statusCode;
 
-    public RestErrorModel() {}
+    public ApiResponse() {}
 
-    public RestErrorModel(String message, int statusCode) {
+    public ApiResponse(String message, int statusCode) {
         this.message = message;
         this.statusCode = statusCode;
     }
