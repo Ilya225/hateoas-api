@@ -1,6 +1,6 @@
 package com.example.hateoasapi.security;
 
-import com.example.hateoasapi.model.RestErrorModel;
+import com.example.hateoasapi.model.ApiResponse;
 import com.example.hateoasapi.utils.exception.JwtTokenException;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -25,7 +25,7 @@ public class ExceptionHandlerFilter extends OncePerRequestFilter {
             response.setStatus(HttpStatus.BAD_REQUEST.value());
             response.setHeader("Content-type", "application/json");
             response.getWriter().write(convertObjectToJson(
-                    new RestErrorModel(
+                    new ApiResponse(
                             e.getMessage(),
                             HttpStatus.BAD_REQUEST.value()
                     )
@@ -34,7 +34,7 @@ public class ExceptionHandlerFilter extends OncePerRequestFilter {
             response.setStatus(HttpStatus.INTERNAL_SERVER_ERROR.value());
             response.setHeader("Content-type", "application/json");
             response.getWriter().write(convertObjectToJson(
-                    new RestErrorModel(
+                    new ApiResponse(
                             e.getMessage(),
                             HttpStatus.INTERNAL_SERVER_ERROR.value()
                     )

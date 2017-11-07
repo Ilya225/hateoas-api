@@ -3,6 +3,7 @@ package com.example.hateoasapi.controller;
 import com.example.hateoasapi.domain.User;
 import com.example.hateoasapi.domain.VerificationToken;
 import com.example.hateoasapi.model.AccountCredentials;
+import com.example.hateoasapi.model.ApiResponse;
 import com.example.hateoasapi.model.JwtToken;
 import com.example.hateoasapi.model.RegisterForm;
 import com.example.hateoasapi.service.AccountService;
@@ -45,7 +46,10 @@ public class UserController {
         User user = accountService.registerUser(input.getUsername(), input.getEmail(), input.getPassword());
         eventPublisher.publishEvent(new OnUserRegisterEvent(user));
 
-        return new ResponseEntity<>(HttpStatus.OK);
+        return new ResponseEntity<>(
+                new ApiResponse("successfully registered", HttpStatus.OK.value()),
+                HttpStatus.OK
+        );
     }
 
     @PostMapping(path = "/login")
@@ -66,7 +70,7 @@ public class UserController {
     @GetMapping(path = "/confirm")
     public String confirmRegistration(@RequestParam("token") String token) {
         VerificationToken verificationToken = accountService.retrieveToken(token);
-        if(verificationToken.isExpired()) {
+        if (verificationToken.isExpired()) {
             return "Token is expired";
         }
         accountService.activateAccount(verificationToken.getUser());
